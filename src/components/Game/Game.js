@@ -1,35 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Field from '../Field/Field';
 import Information from '../Information/Information';
+import store from '../../store';
+import { restartGame } from '../../action';
 
 const Game = () => {
-	const [currentPlayer, setCurrentPlayer] = useState('X');
-	const [isGameEnded, setIsGameEnded] = useState(false);
-	const [isDraw, setIsDraw] = useState(false);
-	const [field, setField] = useState(Array(9).fill(''));
+	const [state, setState] = useState(store.getState());
+
+	useEffect(() => {
+		const unsubscribe = store.subscribe(() => {
+			setState(store.getState());
+		});
+
+		return () => {
+			unsubscribe();
+		};
+	}, []);
 
 	const handleRestart = () => {
-		setCurrentPlayer('X');
-		setIsGameEnded(false);
-		setIsDraw(false);
-		setField(Array(9).fill(''));
+		store.dispatch(restartGame());
 	};
 
 	return (
 		<div>
 			<Information
-				currentPlayer={currentPlayer}
-				isGameEnded={isGameEnded}
-				isDraw={isDraw}
+				currentPlayer={state.currentPlayer}
+				isGameEnded={state.isGameEnded}
+				isDraw={state.isDraw}
 			/>
 			<Field
-				field={field}
-				currentPlayer={currentPlayer}
-				setField={setField}
-				setIsGameEnded={setIsGameEnded}
-				setIsDraw={setIsDraw}
-				setCurrentPlayer={setCurrentPlayer}
-				isGameEnded={isGameEnded}
+				field={state.field}
+				currentPlayer={state.currentPlayer}
+				isGameEnded={state.isGameEnded}
 			/>
 			<button onClick={handleRestart}>Начать заново</button>
 		</div>

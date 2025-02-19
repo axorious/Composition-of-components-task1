@@ -1,35 +1,29 @@
 import React from 'react';
 import FieldLayout from './FieldLayout';
 import PropTypes from 'prop-types';
+import store from '../../store';
+import { setField, setCurrentPlayer, setIsGameEnded, setIsDraw } from '../../action';
 
-const Field = ({
-	field,
-	currentPlayer,
-	setField,
-	setIsGameEnded,
-	setIsDraw,
-	setCurrentPlayer,
-	isGameEnded,
-}) => {
+const Field = ({ field, currentPlayer, isGameEnded }) => {
 	const handleClick = (index) => {
 		if (field[index] === '' && !isGameEnded) {
 			const newField = [...field];
 			newField[index] = currentPlayer;
-			setField(newField);
+			store.dispatch(setField(newField));
 
 			const isWin = checkWin(newField, currentPlayer);
 			if (isWin) {
-				setIsGameEnded(true);
+				store.dispatch(setIsGameEnded(true));
 				return;
 			}
 
 			const isDraw = checkDraw(newField);
 			if (isDraw) {
-				setIsDraw(true);
+				store.dispatch(setIsDraw(true));
 				return;
 			}
 
-			setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+			store.dispatch(setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X'));
 		}
 	};
 
@@ -63,10 +57,6 @@ const Field = ({
 Field.propTypes = {
 	field: PropTypes.arrayOf(PropTypes.string).isRequired,
 	currentPlayer: PropTypes.string.isRequired,
-	setField: PropTypes.func.isRequired,
-	setIsGameEnded: PropTypes.func.isRequired,
-	setIsDraw: PropTypes.func.isRequired,
-	setCurrentPlayer: PropTypes.func.isRequired,
 	isGameEnded: PropTypes.bool.isRequired,
 };
 

@@ -1,29 +1,31 @@
 import React from 'react';
 import FieldLayout from './FieldLayout';
 import PropTypes from 'prop-types';
-import store from '../../store';
+import { useDispatch } from 'react-redux';
 import { setField, setCurrentPlayer, setIsGameEnded, setIsDraw } from '../../action';
 
 const Field = ({ field, currentPlayer, isGameEnded }) => {
+	const dispatch = useDispatch();
+
 	const handleClick = (index) => {
 		if (field[index] === '' && !isGameEnded) {
 			const newField = [...field];
 			newField[index] = currentPlayer;
-			store.dispatch(setField(newField));
+			dispatch(setField(newField));
 
 			const isWin = checkWin(newField, currentPlayer);
 			if (isWin) {
-				store.dispatch(setIsGameEnded(true));
+				dispatch(setIsGameEnded(true));
 				return;
 			}
 
 			const isDraw = checkDraw(newField);
 			if (isDraw) {
-				store.dispatch(setIsDraw(true));
+				dispatch(setIsDraw(true));
 				return;
 			}
 
-			store.dispatch(setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X'));
+			dispatch(setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X'));
 		}
 	};
 

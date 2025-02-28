@@ -1,11 +1,15 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import Game from './components/Game/Game';
+import store from './store';
 
 const App = () => {
 	return (
-		<div>
-			<Game />
-		</div>
+		<Provider store={store}>
+			<div>
+				<Game />
+			</div>
+		</Provider>
 	);
 };
 

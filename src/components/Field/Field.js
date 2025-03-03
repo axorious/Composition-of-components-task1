@@ -1,11 +1,19 @@
 import React from 'react';
 import FieldLayout from './FieldLayout';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setField, setCurrentPlayer, setIsGameEnded, setIsDraw } from '../../action';
+import {
+	selectField,
+	selectCurrentPlayer,
+	selectIsGameEnded,
+} from '../selectors/selectors';
 
-const Field = ({ field, currentPlayer, isGameEnded }) => {
+const Field = () => {
 	const dispatch = useDispatch();
+
+	const field = useSelector(selectField);
+	const currentPlayer = useSelector(selectCurrentPlayer);
+	const isGameEnded = useSelector(selectIsGameEnded);
 
 	const handleClick = (index) => {
 		if (field[index] === '' && !isGameEnded) {
@@ -54,12 +62,6 @@ const Field = ({ field, currentPlayer, isGameEnded }) => {
 	};
 
 	return <FieldLayout field={field} handleClick={handleClick} />;
-};
-
-Field.propTypes = {
-	field: PropTypes.arrayOf(PropTypes.string).isRequired,
-	currentPlayer: PropTypes.string.isRequired,
-	isGameEnded: PropTypes.bool.isRequired,
 };
 
 export default Field;
